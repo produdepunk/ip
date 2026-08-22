@@ -10,11 +10,24 @@ public class Dexter {
         System.out.println(banner);
 
         System.out.println("Welcome my fellow big-brainer! What question do you have in mind?");
+
+
         String line = "";
+        String[] itemList = new String[100];
+        int itemCount = 0;
+
         while (!line.equals("bye")) {
             Scanner in = new Scanner(System.in);
             line = in.nextLine();
-            System.out.println(line);
+            if (line.equals("list")) {
+
+                for (int i = 0; i < itemCount; i++) {
+                    System.out.println(i + 1 + ". " + itemList[i]);
+                }
+            } else if (!line.equals("bye")) {
+                itemList[itemCount++] = line;
+                System.out.println("added: " + line + "\n");
+            }
         }
 
         System.out.println("See you again soon!");
