@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Dexter {
     public static void main(String[] args) {
         String banner = "DDDD   EEEEE  XX XX  TTTTT  EEEEE  RRRR\n"
@@ -8,6 +10,13 @@ public class Dexter {
         System.out.println(banner);
 
         System.out.println("Welcome my fellow big-brainer! What question do you have in mind?");
+        String line = "";
+        while (!line.equals("bye")) {
+            Scanner in = new Scanner(System.in);
+            line = in.nextLine();
+            System.out.println(line);
+        }
+
         System.out.println("See you again soon!");
     }
 }
