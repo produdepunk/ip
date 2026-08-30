@@ -6,4 +6,8 @@ public class Deadline extends Task {
         this.dueDate = date;
         this.type = "D";
     }
+
+    public String toString() {
+        return super.toString() + " (by: " + dueDate + ")";
+    }
 }

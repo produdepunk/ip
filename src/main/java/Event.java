@@ -8,4 +8,8 @@ public class Event extends Task{
         this.endDate = endDate;
         this.type = "E";
     }
+
+    public String toString() {
+        return super.toString() + " (from: " + startDate + " to: " + endDate + ")";
+    }
 }
