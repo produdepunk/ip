@@ -12,47 +12,49 @@ public class Dexter {
         System.out.println("Welcome my fellow big-brainer! What question do you have in mind?");
 
         String line = "";
-        String[] itemList = new String[100];
+        Task[] tasks = new Task[100];
         int itemCount = 0;
-        String[] completionStatus = new String[100];
 
         while (!line.equals("bye")) {
             Scanner in = new Scanner(System.in);
             line = in.nextLine();
             if (line.equals("list")) {
-
                 System.out.println("Here is your list of tasks!");
+                // Prints out the list
                 for (int i = 0; i < itemCount; i++) {
-                    System.out.println(i + 1 + ".[" + completionStatus[i] + "] " + itemList[i]);
+                    String task = tasks[i].description;
+                    System.out.println(i + 1 + ".[" + tasks[i].getStatusIcon() + "] " + task);
                 }
-            } else if (line.indexOf("mark") == 0) {
+            } else if (line.indexOf("mark") == 0) {     // Checks input for mark command
                 String numberString = "";
                 int index = 4;
+                // Converts the number from string to integer
                 while (index < line.length()) {
                     if (line.charAt(index) >= '0' && line.charAt(index) < '9') {
                         numberString += line.charAt(index);
                     }
                     index++;
                 }
-                int numberInt = Integer.parseInt(numberString);
-                completionStatus[numberInt - 1] = "X";
+                int convertedNumber = Integer.parseInt(numberString);
+                tasks[convertedNumber - 1].markAsDone();
                 System.out.println("Alright! Marked it as done!");
-            } else if (line.indexOf("Unmark") == 0) {
+            } else if (line.indexOf("unmark") == 0) {     //Checks input for unmark command
                 String numberString = "";
-                int index = 4;
+                int index = 6;
+                // Converted the number from string to integer
                 while (index < line.length()) {
                     if (line.charAt(index) >= '0' && line.charAt(index) < '9') {
                         numberString += line.charAt(index);
                     }
                     index++;
                 }
-                int numberInt = Integer.parseInt(numberString);
-                completionStatus[numberInt - 1] = " ";
+                int convertedNumber = Integer.parseInt(numberString);
+                tasks[convertedNumber - 1].markAsUndone();
                 System.out.println("Alright! I have unchecked the task!");
-            } else if (!line.equals("bye")) {
-                itemList[itemCount] = line;
-                completionStatus[itemCount] = " ";
-                itemCount++;
+            } else if (!line.equals("bye")) {     // Checks input for a new task
+                Task newTask = new Task(line);
+                // Adds new task to the list of tasks
+                tasks[itemCount++] = newTask;
                 System.out.println("added: " + line);
             }
         }
