@@ -22,8 +22,7 @@ public class Dexter {
                 System.out.println("Here is your list of tasks!");
                 // Prints out the list
                 for (int i = 0; i < itemCount; i++) {
-                    String task = tasks[i].description;
-                    System.out.println(i + 1 + ".[" + tasks[i].getStatusIcon() + "] " + task);
+                    System.out.println(tasks[i]);
                 }
             } else if (line.indexOf("mark") == 0) {     // Checks input for mark command
                 String numberString = "";
@@ -38,7 +37,7 @@ public class Dexter {
                 int convertedNumber = Integer.parseInt(numberString);
                 tasks[convertedNumber - 1].markAsDone();
                 System.out.println("Alright! Marked it as done!");
-            } else if (line.indexOf("unmark") == 0) {     //Checks input for unmark command
+            } else if (line.indexOf("unmark ") == 0) {     //Checks input for unmark command
                 String numberString = "";
                 int index = 6;
                 // Converted the number from string to integer
@@ -51,11 +50,39 @@ public class Dexter {
                 int convertedNumber = Integer.parseInt(numberString);
                 tasks[convertedNumber - 1].markAsUndone();
                 System.out.println("Alright! I have unchecked the task!");
-            } else if (!line.equals("bye")) {     // Checks input for a new task
-                Task newTask = new Task(line);
-                // Adds new task to the list of tasks
+            } else if (line.indexOf("todo") == 0) {     // Checks input for a new task
+                String description = line.substring(5);
+                Task newTask = new Task(description);
+                // Adds new todo task to the list of tasks
                 tasks[itemCount++] = newTask;
-                System.out.println("added: " + line);
+                System.out.println("Alright! Added:");
+                System.out.println(tasks[itemCount - 1]);
+                System.out.println("Now you have " + itemCount + " items");
+            } else if (line.indexOf("deadline ") == 0) {     // Checks input for a new task
+                int index = line.indexOf("/by ");
+                String description = line.substring(9, index - 1);
+                index += 3;
+                String dueDate = line.substring(index);
+                Deadline newTask = new Deadline(description, dueDate);
+                // Adds new todo task to the list of tasks
+                tasks[itemCount++] = newTask;
+                System.out.println("Alright! Added:");
+                System.out.println(tasks[itemCount - 1]);
+                System.out.println("Now you have " + itemCount + " items");
+            } else if (line.indexOf("event ") == 0) {     // Checks input for a new task
+                int fromIndex = line.indexOf("/from ");
+                String description = line.substring(6, fromIndex - 1);
+                fromIndex += 6;
+                int toIndex = line.indexOf("/to ");
+                String startDate = line.substring(fromIndex,toIndex - 1);
+                toIndex += 4;
+                String endDate = line.substring(toIndex);
+                Event newTask = new Event(description, startDate, endDate);
+                // Adds new todo task to the list of tasks
+                tasks[itemCount++] = newTask;
+                System.out.println("Alright! Added:");
+                System.out.println(tasks[itemCount - 1]);
+                System.out.println("Now you have " + itemCount + " items");
             }
         }
 
