@@ -102,26 +102,22 @@ public class Dexter {
 
         while (!line.equals("bye")) {
             line = in.nextLine();
-            if (line.equals("list")) {
-                // Prints out the list
+            if (line.equals("list")) {  // Prints out the list
                 printResponse(Response.LIST);
-            } else if (line.indexOf("mark ") == 0) {     // Checks input for mark command
+            } else if (line.indexOf("mark ") == 0) {  // Checks input for mark command
                 function(line, Command.MARK);
-            } else if (line.indexOf("unmark ") == 0) {     //Checks input for unmark command
+            } else if (line.indexOf("unmark ") == 0) {  //Checks input for unmark command
                 function(line, Command.UNMARK);
-            } else if (line.indexOf("todo ") == 0) {     // Checks input for a new todo task
-                parseTask(line, Type.TODO);
-                // Adds new todo task to the list of tasks
+            } else if (line.indexOf("todo ") == 0) {  // Checks input for a new todo task
+                parseTask(line, Type.TODO);  // Adds new todo task to the list of tasks
                 tasks[itemCount++] = newTask;
                 printResponse(Response.ADDTASK);
-            } else if (line.indexOf("deadline ") == 0) {     // Checks input for a new deadline task
-                parseTask(line, Type.DEADLINE);
-                // Adds new deadline task to the list of tasks
+            } else if (line.indexOf("deadline ") == 0) {  // Checks input for a new deadline task
+                parseTask(line, Type.DEADLINE);  // Adds new deadline task to the list of tasks
                 tasks[itemCount++] = newTask;
                 printResponse(Response.ADDTASK);
-            } else if (line.indexOf("event ") == 0) {     // Checks input for a new event task
-                parseTask(line, Type.EVENT);
-                // Adds new event task to the list of tasks
+            } else if (line.indexOf("event ") == 0) {  // Checks input for a new event task
+                parseTask(line, Type.EVENT);  // Adds new event task to the list of tasks
                 tasks[itemCount++] = newTask;
                 printResponse(Response.ADDTASK);
             }
