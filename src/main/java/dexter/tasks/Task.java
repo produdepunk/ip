@@ -1,3 +1,5 @@
+package dexter.tasks;
+
 public class Task {
     protected String description;
     protected String type;

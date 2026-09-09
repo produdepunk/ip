@@ -1,3 +1,16 @@
+package dexter.ui;
+
+import dexter.classifications.Command;
+import dexter.classifications.Response;
+import dexter.classifications.Type;
+import dexter.exceptions.EmptyListException;
+import dexter.exceptions.InvalidTaskException;
+import dexter.exceptions.MissingDescriptionException;
+import dexter.exceptions.MissingIndexException;
+import dexter.tasks.Deadline;
+import dexter.tasks.Event;
+import dexter.tasks.Task;
+
 import java.util.Scanner;
 
 public class Dexter {
