@@ -6,8 +6,14 @@ public class Dexter {
     protected static Task newTask;
 
     public static void printResponse(Response userInput) {
-        switch(userInput) {
+        switch (userInput) {
             case WELCOME:
+                String banner = "DDDD   EEEEE  XX XX  TTTTT  EEEEE  RRRR\n"
+                        + "D   D  E       X X     T    E      R   R\n"
+                        + "D   D  EEEE     X      T    EEEE   RRRR\n"
+                        + "D   D  E        X      T    E      R R\n"
+                        + "DDDD   EEEEE   X X     T    EEEEE  R  RR\n";
+                System.out.println(banner);
                 System.out.println("Welcome my fellow big-brainer! What question do you have in mind?");
                 break;
             case LEAVE:
@@ -54,75 +60,88 @@ public class Dexter {
         }
     }
 
-    public static void function(String line, Command command) {
-        String numberString = "";
-        int index;
+    public static void function(String line, Command command) throws MissingIndexException, NumberFormatException, EmptyListException {
+        String[] parts = line.split(" ");
+        if (parts.length < 2 || parts[1].isBlank()) {
+            throw new MissingIndexException();
+        }
+        if (itemCount == 0) {
+            throw new EmptyListException();
+        }
         int taskNumber;
-        switch(command) {
-            case MARK:
-                index = 4;
-                // Converts the number from string to integer
-                while (index < line.length()) {
-                    if (line.charAt(index) >= '0' && line.charAt(index) < '9') {
-                        numberString += line.charAt(index);
-                    }
-                    index++;
-                }
-                taskNumber = Integer.parseInt(numberString);
-                tasks[taskNumber - 1].markAsDone();
-                System.out.println("Alright! Marked it as done!");
-                break;
-            case UNMARK:
-                index = 6;
-                // Converted the number from string to integer
-                while (index < line.length()) {
-                    if (line.charAt(index) >= '0' && line.charAt(index) < '9') {
-                        numberString += line.charAt(index);
-                    }
-                    index++;
-                }
-                taskNumber = Integer.parseInt(numberString);
-                tasks[taskNumber - 1].markAsUndone();
-                System.out.println("Alright! I have unchecked the task!");
-                break;
+        try {
+            switch (command) {
+                case MARK:
+                    taskNumber = Integer.parseInt(parts[1]);
+                    tasks[taskNumber - 1].markAsDone();
+                    System.out.println("Alright! Marked it as done!");
+                    break;
+                case UNMARK:
+                    taskNumber = Integer.parseInt(parts[1]);
+                    tasks[taskNumber - 1].markAsUndone();
+                    System.out.println("Alright! I have unchecked the task!");
+                    break;
+            }
+        } catch (NumberFormatException e) {
+                System.out.println("Oh no! The task number is not valid. Please enter a valid number.");
         }
     }
 
-    public static void main(String[] args) {
-        String banner = "DDDD   EEEEE  XX XX  TTTTT  EEEEE  RRRR\n"
-                + "D   D  E       X X     T    E      R   R\n"
-                + "D   D  EEEE     X      T    EEEE   RRRR\n"
-                + "D   D  E        X      T    E      R R\n"
-                + "DDDD   EEEEE   X X     T    EEEEE  R  RR\n";
-        System.out.println(banner);
+    public static Type inputCommand(String line) throws MissingDescriptionException, InvalidTaskException {
+        if (line == null || line.isBlank()) {
+            throw new InvalidTaskException();
+        }
+        String[] parts = line.split(" ");
+        Type type;
+        switch (parts[0]) {
+            case "todo":
+                type = Type.TODO;
+                break;
+            case "deadline":
+                type = Type.DEADLINE;
+                break;
+            case "event":
+                type = Type.EVENT;
+                break;
+            default:
+                throw new InvalidTaskException();
+        }
+        if (parts.length < 2 || parts[1].isBlank()) {
+            throw new MissingDescriptionException();
+        }
+        return type;
+    }
 
+    public static void main(String[] args) {
         printResponse(Response.WELCOME);
         String line = "";
         Scanner in = new Scanner(System.in);
 
         while (!line.equals("bye")) {
             line = in.nextLine();
-            if (line.equals("list")) {  // Prints out the list
-                printResponse(Response.LIST);
-            } else if (line.indexOf("mark ") == 0) {  // Checks input for mark command
-                function(line, Command.MARK);
-            } else if (line.indexOf("unmark ") == 0) {  //Checks input for unmark command
-                function(line, Command.UNMARK);
-            } else if (line.indexOf("todo ") == 0) {  // Checks input for a new todo task
-                parseTask(line, Type.TODO);  // Adds new todo task to the list of tasks
-                tasks[itemCount++] = newTask;
-                printResponse(Response.ADDTASK);
-            } else if (line.indexOf("deadline ") == 0) {  // Checks input for a new deadline task
-                parseTask(line, Type.DEADLINE);  // Adds new deadline task to the list of tasks
-                tasks[itemCount++] = newTask;
-                printResponse(Response.ADDTASK);
-            } else if (line.indexOf("event ") == 0) {  // Checks input for a new event task
-                parseTask(line, Type.EVENT);  // Adds new event task to the list of tasks
-                tasks[itemCount++] = newTask;
-                printResponse(Response.ADDTASK);
+            try {
+                if (line.equals("list")) {
+                    printResponse(Response.LIST);
+                } else if (line.startsWith("mark")) {
+                    function(line, Command.MARK);
+                } else if (line.startsWith("unmark")) {
+                    function(line, Command.UNMARK);
+                } else {
+                    Type type = inputCommand(line);
+                    parseTask(line, type);
+                    tasks[itemCount++] = newTask;
+                    printResponse(Response.ADDTASK);
+                }
+            } catch (MissingDescriptionException e) {
+                System.out.println("Oh, I think you may have missed out some details. Can you repeat?");
+            } catch (InvalidTaskException e) {
+                System.out.println("Sorry but I do not understand. Can you repeat?");
+            } catch (MissingIndexException e) {
+                System.out.println("Oh no! You need to have a number to mark the indicated item in the list.");
+            } catch (EmptyListException e) {
+                System.out.println("Hey! Your list is still empty!");
             }
         }
-
         printResponse(Response.LEAVE);
     }
 }
