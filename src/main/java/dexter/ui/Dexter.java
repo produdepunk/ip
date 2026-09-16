@@ -11,10 +11,12 @@ import dexter.tasks.Deadline;
 import dexter.tasks.Event;
 import dexter.tasks.Task;
 
+import javax.management.RuntimeErrorException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Dexter {
-    protected static Task[] tasks = new Task[100];
+    protected static ArrayList<Task> tasks = new ArrayList<>();
     protected static int itemCount = 0;
     protected static Task newTask;
 
@@ -34,13 +36,18 @@ public class Dexter {
                 break;
             case ADDTASK:
                 System.out.println("Alright! Added:");
-                System.out.println(tasks[itemCount - 1]);
+                System.out.println(tasks.get(itemCount - 1));
                 System.out.println("Now you have " + itemCount + " items");
+                break;
+            case DELETETASK:
+                System.out.println("Ok! Removed:");
+                System.out.println(tasks.get(itemCount - 1));
+                System.out.println("Now you have " + --itemCount + " items");
                 break;
             case LIST:
                 System.out.println("Sure! Here is your list.");
                 for (int i = 0; i < itemCount; i++) {
-                    System.out.println(tasks[i]);
+                    System.out.println(tasks.get(i));
                 }
                 break;
         }
@@ -86,17 +93,24 @@ public class Dexter {
             switch (command) {
                 case MARK:
                     taskNumber = Integer.parseInt(parts[1]);
-                    tasks[taskNumber - 1].markAsDone();
+                    tasks.get(taskNumber - 1).markAsDone();
                     System.out.println("Alright! Marked it as done!");
                     break;
                 case UNMARK:
                     taskNumber = Integer.parseInt(parts[1]);
-                    tasks[taskNumber - 1].markAsUndone();
+                    tasks.get(taskNumber - 1).markAsUndone();
                     System.out.println("Alright! I have unchecked the task!");
                     break;
+                case DELETE:
+                    taskNumber = Integer.parseInt(parts[1]);
+                    if (taskNumber > itemCount) {
+                        throw new IndexOutOfBoundsException();
+                    }
+                    printResponse(Response.DELETETASK);
+                    tasks.remove(taskNumber - 1);
             }
         } catch (NumberFormatException e) {
-                System.out.println("Oh no! The task number is not valid. Please enter a valid number.");
+            System.out.println("Oh no! The task number is not valid. Please enter a valid number.");
         }
     }
 
@@ -139,10 +153,13 @@ public class Dexter {
                     function(line, Command.MARK);
                 } else if (line.startsWith("unmark")) {
                     function(line, Command.UNMARK);
+                } else if(line.startsWith("delete")) {
+                    function(line, Command.DELETE);
                 } else {
                     Type type = inputCommand(line);
                     parseTask(line, type);
-                    tasks[itemCount++] = newTask;
+                    tasks.add(newTask);
+                    itemCount++;
                     printResponse(Response.ADDTASK);
                 }
             } catch (MissingDescriptionException e) {
@@ -150,9 +167,11 @@ public class Dexter {
             } catch (InvalidTaskException e) {
                 System.out.println("Sorry but I do not understand. Can you repeat?");
             } catch (MissingIndexException e) {
-                System.out.println("Oh no! You need to have a number to mark the indicated item in the list.");
+                System.out.println("Oh no! You need to have a number to indicate the item in the list.");
             } catch (EmptyListException e) {
                 System.out.println("Hey! Your list is still empty!");
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Please enter a value within the list size!");
             }
         }
         printResponse(Response.LEAVE);
