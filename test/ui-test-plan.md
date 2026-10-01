@@ -77,7 +77,7 @@ java -cp out/production/ip dexter.Dexter
 
 ### Inputs
 ```text
-deadline submit report by Friday
+deadline submit report by 2019-12-02
 event study group from Monday to Tuesday
 todo
 deadline report
@@ -99,7 +99,7 @@ DDDD   EEEEE   X X     T    EEEEE  R  RR
 
 Welcome my fellow big-brainer! What question do you have in mind?
 Alright! Added:
-[D][ ] submit report (by: Friday)
+[D][ ] submit report (by: Dec 02 2019)
 Now you have 1 items
 Alright! Added:
 [E][ ] study group (from: Monday to: Tuesday)
@@ -113,7 +113,7 @@ Alright! Added:
 [T][ ] buy bread
 Now you have 3 items
 Sure! Here is your list.
-[D][ ] submit report (by: Friday)
+[D][ ] submit report (by: Dec 02 2019)
 [E][ ] study group (from: Monday to: Tuesday)
 [T][ ] buy bread
 See you again soon!
@@ -173,5 +173,57 @@ Ok! Removed:
 [T][ ] buy milk
 Now you have 0 items
 Sure! Here is your list.
+See you again soon!
+```
+
+## Test case 5: Deadline dates and times
+
+### Aim
+Verify both date formats, /by syntax, strict rejection of impossible dates and times, and recovery after invalid input. Start with an empty data directory.
+
+### Program command
+```text
+java -cp out/production/ip dexter.Dexter
+```
+
+### Inputs
+```text
+deadline return book /by 2/12/2019 1800
+deadline report /by 2019-10-15
+deadline invalid /by 2019-02-29
+deadline invalid /by 31/2/2019 1800
+deadline invalid /by 2/12/2019 2400
+deadline invalid /by Friday
+deadline leap day by 2020-02-29
+list
+bye
+```
+
+### Expected output
+```text
+DDDD   EEEEE  XX XX  TTTTT  EEEEE  RRRR
+D   D  E       X X     T    E      R   R
+D   D  EEEE     X      T    EEEE   RRRR
+D   D  E        X      T    E      R R
+DDDD   EEEEE   X X     T    EEEEE  R  RR
+
+Welcome my fellow big-brainer! What question do you have in mind?
+Alright! Added:
+[D][ ] return book (by: Dec 02 2019 18:00)
+Now you have 1 items
+Alright! Added:
+[D][ ] report (by: Oct 15 2019)
+Now you have 2 items
+Invalid date. Use yyyy-MM-dd or d/M/yyyy HHmm (e.g. 2/12/2019 1800).
+Invalid date. Use yyyy-MM-dd or d/M/yyyy HHmm (e.g. 2/12/2019 1800).
+Invalid date. Use yyyy-MM-dd or d/M/yyyy HHmm (e.g. 2/12/2019 1800).
+Invalid date. Use yyyy-MM-dd or d/M/yyyy HHmm (e.g. 2/12/2019 1800).
+Alright! Added:
+[D][ ] leap day (by: Feb 29 2020)
+Now you have 3 items
+Sure! Here is your list.
+[D][ ] return book (by: Dec 02 2019 18:00)
+[D][ ] report (by: Oct 15 2019)
+[D][ ] leap day (by: Feb 29 2020)
 See you again soon!
 ```
