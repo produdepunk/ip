@@ -2,14 +2,31 @@ package dexter.handler;
 
 import dexter.classifications.Command;
 import dexter.exceptions.EmptyListException;
+import dexter.exceptions.MissingDescriptionException;
 import dexter.exceptions.MissingIndexException;
 import dexter.tasks.Task;
 import dexter.ui.Ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/** Handles commands that mark, unmark, or delete an existing task. */
+/** Handles commands that find, mark, unmark, or delete tasks. */
 public class Function {
+
+    /** Finds case-sensitive description matches without modifying the task list. */
+    public static void find(String line, List<Task> tasks, Ui ui) throws MissingDescriptionException {
+        String keyword = line.substring(4).trim();
+        if (keyword.isEmpty()) {
+            throw new MissingDescriptionException();
+        }
+        ArrayList<Task> matches = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.getDescription().contains(keyword)) {
+                matches.add(task);
+            }
+        }
+        ui.showMatchingTasks(matches);
+    }
 
     public static void function(String line, Command command, List<Task> tasks, Ui ui)
             throws MissingIndexException, EmptyListException {
