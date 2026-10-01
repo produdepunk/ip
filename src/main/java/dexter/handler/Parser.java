@@ -1,4 +1,4 @@
-package dexter.parse;
+package dexter.handler;
 
 import dexter.classifications.Type;
 import dexter.exceptions.InvalidTaskException;

@@ -118,3 +118,60 @@ Sure! Here is your list.
 [T][ ] buy bread
 See you again soon!
 ```
+
+## Test case 4: Mark, unmark, delete and command errors
+
+### Aim
+Verify the extracted Function updates the shared list and preserves confirmations and errors for empty lists, missing numbers, invalid numbers and out-of-range numbers. Start with an empty data directory.
+
+### Program command
+```text
+java -cp out/production/ip dexter.Dexter
+```
+
+### Inputs
+```text
+mark 1
+todo buy milk
+mark
+mark abc
+unmark 0
+delete 2
+mark 1
+list
+unmark 1
+list
+delete 1
+list
+bye
+```
+
+### Expected output
+```text
+DDDD   EEEEE  XX XX  TTTTT  EEEEE  RRRR
+D   D  E       X X     T    E      R   R
+D   D  EEEE     X      T    EEEE   RRRR
+D   D  E        X      T    E      R R
+DDDD   EEEEE   X X     T    EEEEE  R  RR
+
+Welcome my fellow big-brainer! What question do you have in mind?
+Hey! Your list is still empty!
+Alright! Added:
+[T][ ] buy milk
+Now you have 1 items
+Oh no! You need to have a number to indicate the item in the list.
+Oh no! The task number is not valid. Please enter a valid number.
+Please enter a value within the list size!
+Please enter a value within the list size!
+Alright! Marked it as done!
+Sure! Here is your list.
+[T][X] buy milk
+Alright! I have unchecked the task!
+Sure! Here is your list.
+[T][ ] buy milk
+Ok! Removed:
+[T][ ] buy milk
+Now you have 0 items
+Sure! Here is your list.
+See you again soon!
+```

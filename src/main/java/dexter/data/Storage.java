@@ -88,8 +88,8 @@ public class Storage {
                         }
                         break;
                 }
-            fileWriter.write(System.lineSeparator());
-          }
+                fileWriter.write(System.lineSeparator());
+            }
         }
     }
 }

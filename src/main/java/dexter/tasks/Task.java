@@ -5,6 +5,7 @@ public class Task {
     protected String type;
     protected boolean isDone;
 
+
     public Task(String description) {
         this.description = description;
         this.type = "T";

@@ -1,0 +1,51 @@
+package dexter.handler;
+
+import dexter.classifications.Command;
+import dexter.exceptions.EmptyListException;
+import dexter.exceptions.MissingIndexException;
+import dexter.tasks.Task;
+import dexter.ui.Ui;
+
+import java.util.List;
+
+/** Handles commands that mark, unmark, or delete an existing task. */
+public class Function {
+
+    public static void function(String line, Command command, List<Task> tasks, Ui ui)
+            throws MissingIndexException, EmptyListException {
+        String[] parts = line.split(" ");
+        int itemCount = tasks.size();
+        if (parts.length < 2 || parts[1].isBlank()) {
+            throw new MissingIndexException();
+        }
+        if (itemCount == 0) {
+            throw new EmptyListException();
+        }
+        int taskNumber;
+        try {
+            switch (command) {
+                case MARK:
+                    taskNumber = Integer.parseInt(parts[1]);
+                    tasks.get(taskNumber - 1).markAsDone();
+                    System.out.println("Alright! Marked it as done!");
+                    break;
+                case UNMARK:
+                    taskNumber = Integer.parseInt(parts[1]);
+                    tasks.get(taskNumber - 1).markAsUndone();
+                    System.out.println("Alright! I have unchecked the task!");
+                    break;
+                case DELETE:
+                    taskNumber = Integer.parseInt(parts[1]);
+                    if (taskNumber > itemCount) {
+                        throw new IndexOutOfBoundsException();
+                    }
+                    Task deletedTask = tasks.get(itemCount - 1);
+                    itemCount--;
+                    ui.showTaskDeleted(deletedTask, itemCount);
+                    tasks.remove(taskNumber - 1);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Oh no! The task number is not valid. Please enter a valid number.");
+        }
+    }
+}

@@ -5,7 +5,8 @@ import dexter.exceptions.EmptyListException;
 import dexter.exceptions.InvalidTaskException;
 import dexter.exceptions.MissingDescriptionException;
 import dexter.exceptions.MissingIndexException;
-import dexter.parse.Parser;
+import dexter.handler.Function;
+import dexter.handler.Parser;
 import dexter.tasks.Task;
 import dexter.data.Storage;
 import dexter.ui.Ui;
@@ -16,70 +17,40 @@ import java.util.Scanner;
 
 /** Coordinates command execution, task storage, and user interaction. */
 public class Dexter {
-    protected static ArrayList<Task> tasks = new ArrayList<>();
-    protected static int itemCount = 0;
-    private static Ui ui = new Ui();
+    private Storage storage;
+    private ArrayList<Task> tasks;
+    private Ui ui;
 
-    public static void function(String line, Command command) throws MissingIndexException, NumberFormatException, EmptyListException {
-        String[] parts = line.split(" ");
-        if (parts.length < 2 || parts[1].isBlank()) {
-            throw new MissingIndexException();
-        }
-        if (itemCount == 0) {
-            throw new EmptyListException();
-        }
-        int taskNumber;
-        try {
-            switch (command) {
-                case MARK:
-                    taskNumber = Integer.parseInt(parts[1]);
-                    tasks.get(taskNumber - 1).markAsDone();
-                    System.out.println("Alright! Marked it as done!");
-                    break;
-                case UNMARK:
-                    taskNumber = Integer.parseInt(parts[1]);
-                    tasks.get(taskNumber - 1).markAsUndone();
-                    System.out.println("Alright! I have unchecked the task!");
-                    break;
-                case DELETE:
-                    taskNumber = Integer.parseInt(parts[1]);
-                    if (taskNumber > itemCount) {
-                        throw new IndexOutOfBoundsException();
-                    }
-                    Task deletedTask = tasks.get(itemCount - 1);
-                    itemCount--;
-                    ui.showTaskDeleted(deletedTask, itemCount);
-                    tasks.remove(taskNumber - 1);
-            }
-        } catch (NumberFormatException e) {
-                System.out.println("Oh no! The task number is not valid. Please enter a valid number.");
-        }
-    }
-
-    public static void main(String[] args) {
-        Storage storage = new Storage();
-        ui.showWelcome();
-        String line;
-        Scanner in = new Scanner(System.in);
+    /** Initializes the application and loads saved tasks, or starts with an empty list. */
+    public Dexter() {
+        ui = new Ui();
+        storage = new Storage();
         try {
             tasks = storage.readFromDatabase();
         } catch (IOException e) {
             tasks = new ArrayList<>();
         }
-        itemCount = tasks.size();
+    }
+
+    /** Displays the greeting and processes user commands until the user exits. */
+    public void run() {
+        ui.showWelcome();
+        String line;
+        Scanner in = new Scanner(System.in);
+        int itemCount = tasks.size();
         while (true) {
             line = in.nextLine();
             try {
                 if (line.equals("list")) {
                     ui.showTaskList(tasks);
                 } else if (line.startsWith("mark")) {
-                    function(line, Command.MARK);
+                    Function.function(line, Command.MARK, tasks, ui);
                     storage.writeToDatabase(tasks);
                 } else if (line.startsWith("unmark")) {
-                    function(line, Command.UNMARK);
+                    Function.function(line, Command.UNMARK, tasks, ui);
                     storage.writeToDatabase(tasks);
                 } else if(line.startsWith("delete")) {
-                    function(line, Command.DELETE);
+                    Function.function(line, Command.DELETE, tasks, ui);
                     storage.writeToDatabase(tasks);
                 } else if (line.equals("bye")) {
                     ui.showFarewell();
@@ -103,8 +74,12 @@ public class Dexter {
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("Please enter a value within the list size!");
             } catch (IOException e) {
-                System.out.println("Sorry I have trouble ");
+                System.out.println("Sorry I have trouble retrieving ur data");
             }
         }
+    }
+
+    public static void main(String[] args) {
+        new Dexter().run();
     }
 }
