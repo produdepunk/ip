@@ -18,6 +18,11 @@ public class Deadline extends Task {
         this.type = "D";
     }
 
+    /**
+     * Returns this task's due date and time.
+     *
+     * @return the deadline date and time
+     */
     public LocalDateTime getDueDate() {
         return dueDate;
     }

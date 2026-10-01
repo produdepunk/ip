@@ -13,7 +13,14 @@ import java.util.List;
 /** Handles commands that find, mark, unmark, or delete tasks. */
 public class Function {
 
-    /** Finds case-sensitive description matches without modifying the task list. */
+    /**
+     * Finds case-sensitive description matches without modifying the task list.
+     *
+     * @param line the complete find command
+     * @param tasks the tasks to search
+     * @param ui the user-interface handler used to display the results
+     * @throws MissingDescriptionException if the command does not contain a keyword
+     */
     public static void find(String line, List<Task> tasks, Ui ui) throws MissingDescriptionException {
         String keyword = line.substring(4).trim();
         if (keyword.isEmpty()) {
@@ -28,6 +35,16 @@ public class Function {
         ui.showMatchingTasks(matches);
     }
 
+    /**
+     * Applies a mark, unmark, or delete command to the selected task.
+     *
+     * @param line the complete command, including the task number
+     * @param command the operation to perform
+     * @param tasks the task list to modify
+     * @param ui the user-interface handler used to display deletion results
+     * @throws MissingIndexException if the command does not contain a task number
+     * @throws EmptyListException if there are no tasks to modify
+     */
     public static void function(String line, Command command, List<Task> tasks, Ui ui)
             throws MissingIndexException, EmptyListException {
         String[] parts = line.split(" ");
