@@ -11,8 +11,12 @@ public class DateParser {
             DateTimeFormatter.ofPattern("d/M/uuuu HHmm").withResolverStyle(ResolverStyle.STRICT);
 
     /**
-     * Accepts yyyy-MM-dd, d/M/uuuu HHmm, or an ISO date-time saved by Storage.
-     * Dates without a time use midnight. Invalid dates throw DateTimeParseException.
+     * Parses yyyy-MM-dd, d/M/uuuu HHmm, or an ISO date-time saved by Storage
+     * into a {@link LocalDateTime}. Dates without a time use midnight.
+     *
+     * @param text the date text entered by the user or loaded from storage
+     * @return the parsed date and time
+     * @throws java.time.format.DateTimeParseException if the text is not a valid supported date
      */
     public static LocalDateTime parse(String text) {
         text = text.trim();

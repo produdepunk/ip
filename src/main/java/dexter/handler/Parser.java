@@ -57,7 +57,14 @@ public class Parser {
         }
     }
 
-    /** Checks the command keyword and ensures it is followed by a description. */
+    /**
+     * Checks the command keyword and ensures it is followed by a description.
+     *
+     * @param line the complete command entered by the user
+     * @return the type of task requested by the command
+     * @throws MissingDescriptionException if the command has no description
+     * @throws InvalidTaskException if the command is blank or unrecognized
+     */
     private static Type inputCommand(String line) throws MissingDescriptionException, InvalidTaskException {
         if (line == null || line.isBlank()) {
             throw new InvalidTaskException();

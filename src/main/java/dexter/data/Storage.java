@@ -9,13 +9,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/** Reads tasks from and writes tasks to Dexter's local data file. */
 public class Storage {
     private static final File FILE = new File("data/dexter.txt");
 
+    /** Creates a storage handler that uses Dexter's default data file. */
     public Storage() {
-
     }
 
+    /**
+     * Loads tasks from the local data file.
+     *
+     * <p>If the file does not exist, it is created and an empty task list is returned.
+     * Malformed or unsupported records are skipped.</p>
+     *
+     * @return the tasks stored in the local data file
+     * @throws IOException if the file cannot be created or read
+     */
     public ArrayList<Task> readFromDatabase() throws IOException {
         File file = FILE;
         ArrayList<Task> itemList = new ArrayList<>();
@@ -64,6 +74,12 @@ public class Storage {
         return itemList;
     }
 
+    /**
+     * Saves the given tasks to the local data file, replacing its previous contents.
+     *
+     * @param itemList the tasks to save
+     * @throws IOException if the data file cannot be created or written
+     */
     public void writeToDatabase(ArrayList<Task> itemList) throws IOException {
         FILE.getParentFile().mkdirs();
         try (FileWriter fileWriter = new FileWriter(FILE)) {

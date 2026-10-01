@@ -84,7 +84,8 @@ public class Dexter {
         }
     }
 
+    /** Starts the Dexter application. */
     public static void main(String[] args) {
-            new Dexter().run();
+        new Dexter().run();
     }
 }
