@@ -227,3 +227,69 @@ Sure! Here is your list.
 [D][ ] leap day (by: Feb 29 2020)
 See you again soon!
 ```
+
+## Test case 6: Find tasks by description
+
+### Aim
+Verify case-sensitive substring matching, consecutive result numbering, completed tasks, empty lists, no matches, missing keywords, and that searching does not change the list or match deadline dates. Start with an empty data directory.
+
+### Program command
+```text
+java -cp out/production/ip dexter.Dexter
+```
+
+### Inputs
+```text
+find book
+todo read book
+todo buy milk
+deadline return book /by 2019-12-02
+mark 1
+find book
+find BOOK
+find Dec
+find
+finder book
+find return book
+list
+bye
+```
+
+### Expected output
+```text
+DDDD   EEEEE  XX XX  TTTTT  EEEEE  RRRR
+D   D  E       X X     T    E      R   R
+D   D  EEEE     X      T    EEEE   RRRR
+D   D  E        X      T    E      R R
+DDDD   EEEEE   X X     T    EEEEE  R  RR
+
+Welcome my fellow big-brainer! What question do you have in mind?
+Here are the matching tasks in your list:
+No matching tasks found.
+Alright! Added:
+[T][ ] read book
+Now you have 1 items
+Alright! Added:
+[T][ ] buy milk
+Now you have 2 items
+Alright! Added:
+[D][ ] return book (by: Dec 02 2019)
+Now you have 3 items
+Alright! Marked it as done!
+Here are the matching tasks in your list:
+1.[T][X] read book
+2.[D][ ] return book (by: Dec 02 2019)
+Here are the matching tasks in your list:
+No matching tasks found.
+Here are the matching tasks in your list:
+No matching tasks found.
+Oh, I think you may have missed out some details. Can you repeat?
+Sorry but I do not understand. Can you repeat?
+Here are the matching tasks in your list:
+1.[D][ ] return book (by: Dec 02 2019)
+Sure! Here is your list.
+[T][X] read book
+[T][ ] buy milk
+[D][ ] return book (by: Dec 02 2019)
+See you again soon!
+```

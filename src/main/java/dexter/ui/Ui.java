@@ -39,4 +39,15 @@ public class Ui {
             System.out.println(task);
         }
     }
+
+    /** Displays search results numbered from one, or a message if none match. */
+    public void showMatchingTasks(List<Task> matches) {
+        System.out.println("Here are the matching tasks in your list:");
+        if (matches.isEmpty()) {
+            System.out.println("No matching tasks found.");
+        }
+        for (int i = 0; i < matches.size(); i++) {
+            System.out.println((i + 1) + "." + matches.get(i));
+        }
+    }
 }

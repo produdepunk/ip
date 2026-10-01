@@ -44,6 +44,8 @@ public class Dexter {
             try {
                 if (line.equals("list")) {
                     ui.showTaskList(tasks);
+                } else if (line.equals("find") || line.startsWith("find ")) {
+                    Function.find(line, tasks, ui);
                 } else if (line.startsWith("mark")) {
                     Function.function(line, Command.MARK, tasks, ui);
                     storage.writeToDatabase(tasks);
