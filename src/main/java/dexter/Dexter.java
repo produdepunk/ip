@@ -12,6 +12,7 @@ import dexter.data.Storage;
 import dexter.ui.Ui;
 
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -63,6 +64,8 @@ public class Dexter {
                     storage.writeToDatabase(tasks);
 
                 }
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date. Use yyyy-MM-dd or d/M/yyyy HHmm (e.g. 2/12/2019 1800).");
             } catch (MissingDescriptionException e) {
                 System.out.println("Oh, I think you may have missed out some details. Can you repeat?");
             } catch (InvalidTaskException e) {
@@ -80,6 +83,6 @@ public class Dexter {
     }
 
     public static void main(String[] args) {
-        new Dexter().run();
+            new Dexter().run();
     }
 }

@@ -26,18 +26,11 @@ public class Parser {
                 description = line.substring(5);
                 return new Task(description);
             case DEADLINE:
-                if (!line.contains("by ")) {
+                String[] parts = line.substring(9).split("\\s+/?by\\s+", 2);
+                if (parts.length < 2 || parts[0].isBlank() || parts[1].isBlank()) {
                     throw new MissingDescriptionException();
                 }
-                String[] parts = line.split("by ");
-                if (parts.length < 2) {
-                    throw new MissingDescriptionException();
-                }
-                int index = line.indexOf("by ");
-                description = line.substring(9, index - 1);
-                index += 3;
-                String dueDate = line.substring(index);
-                return new Deadline(description, dueDate);
+                return new Deadline(parts[0].trim(), parts[1].trim());
             case EVENT:
                 if (!line.contains("from ") || !line.contains("to ")) {
                     throw new MissingDescriptionException();
